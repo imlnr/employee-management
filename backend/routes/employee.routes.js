@@ -1,12 +1,13 @@
 const express = require('express');
 const { EmployeeModel } = require('../models/employee.model');
+const { auth } = require('../middlewares/Auth.middleware');
 const employeeRouter = express.Router();
 
 
-employeeRouter.get('/employees', async (req, res) => {
+employeeRouter.get('/employees', auth, async (req, res) => {
     try {
-        const page = parseInt(req.query.page) || 1; 
-        const limit = 5; 
+        const page = parseInt(req.query.page) || 1;
+        const limit = 5;
 
         const skip = (page - 1) * limit;
 
@@ -39,7 +40,7 @@ employeeRouter.get('/employees', async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
-employeeRouter.get('/employees/departments', async (req, res) => {
+employeeRouter.get('/employees/departments', auth, async (req, res) => {
     try {
         const departments = await EmployeeModel.distinct('department');
 
@@ -51,7 +52,7 @@ employeeRouter.get('/employees/departments', async (req, res) => {
 });
 
 
-employeeRouter.get('/employees/search', async (req, res) => {
+employeeRouter.get('/employees/search', auth, async (req, res) => {
     try {
         const firstName = req.query.firstName;
         const employees = await EmployeeModel.find({ firstName: { $regex: new RegExp(firstName, 'i') } });
@@ -60,7 +61,7 @@ employeeRouter.get('/employees/search', async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
-employeeRouter.delete('/employee/:id', async (req, res) => {
+employeeRouter.delete('/employee/:id', auth, async (req, res) => {
     const id = req.params.id;
     try {
         await EmployeeModel.findByIdAndDelete({ _id: id });
