@@ -18,16 +18,17 @@ import { FaUserAlt, FaLock } from "react-icons/fa";
 import { Link as RouterLink } from "react-router-dom";
 const CFaUserAlt = chakra(FaUserAlt);
 const CFaLock = chakra(FaLock);
+import { useDispatch, useSelector } from 'react-redux';
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
-
+    const dispatch = useDispatch();
     const handleShowClick = () => setShowPassword(!showPassword);
     const [email, setemail] = useState('');
     const [password, setpassword] = useState('');
 
     const handlesubmit = () => {
-
+        dispatch()
     }
 
     return (
