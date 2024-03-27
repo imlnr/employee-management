@@ -33,10 +33,10 @@ userRouter.post("/login", async (req, res) => {
         if (!user) {
             return res.status(402).json({ error: "User Does not Exist, please register" })
         }
-        bcrypt.compare(password, user, password, (err, result) => {
+        bcrypt.compare(password, user.password, (err, result) => {
             if (result) {
                 const token = jwt.sign({ userID: user._id, email: user.email }, "masai", { expiresIn: '7d' });
-                localStorage.setItem("token", token);
+                // localStorage.setItem("token", token);
                 res.json({ "msg": "Login Successfull", "token": token })
             }
             else {
