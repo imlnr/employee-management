@@ -4,7 +4,7 @@ const { auth } = require('../middlewares/Auth.middleware');
 const employeeRouter = express.Router();
 
 
-employeeRouter.get('/employees', auth, async (req, res) => {
+employeeRouter.get('/employees', async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const limit = 5;

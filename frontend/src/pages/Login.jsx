@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useDispatch } from 'react-redux';
+import axios from "axios";
 import {
     Flex,
     Heading,
@@ -12,13 +14,14 @@ import {
     Avatar,
     FormControl,
     FormHelperText,
-    InputRightElement
+    InputRightElement,
+    useToast
 } from "@chakra-ui/react";
 import { FaUserAlt, FaLock } from "react-icons/fa";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { LOGIN_FAILURE, LOGIN_REQUEST, LOGIN_SUCCESS } from "../redux/action-types";
 const CFaUserAlt = chakra(FaUserAlt);
 const CFaLock = chakra(FaLock);
-import { useDispatch, useSelector } from 'react-redux';
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -26,10 +29,41 @@ const Login = () => {
     const handleShowClick = () => setShowPassword(!showPassword);
     const [email, setemail] = useState('');
     const [password, setpassword] = useState('');
-
-    const handlesubmit = () => {
-        dispatch()
-    }
+    const toast = useToast();
+    const navigate = useNavigate();
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        dispatch({ type: LOGIN_REQUEST });
+        try {
+            const response = await axios.post('https://employee-management-tbu5.onrender.com/user/login', {
+                email: email,
+                password: password
+            });
+            if (response && response.data.token) {
+                localStorage.setItem('token', response.data.token);
+                dispatch({ type: LOGIN_SUCCESS });
+                toast({
+                    title: "Login Successful",
+                    description: "You have successfully loggedIn.",
+                    status: "success",
+                    duration: 5000,
+                    isClosable: true,
+                });
+                navigate('/dashboard')
+            }
+            console.log(response.data);
+        } catch (error) {
+            console.error('Error:', error);
+            dispatch({ type: LOGIN_FAILURE });
+            toast({
+                title: "Login Failed",
+                description: "Invalid email or password.",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+            });
+        }
+    };
 
     return (
         <Flex
@@ -92,6 +126,7 @@ const Login = () => {
                                 variant="solid"
                                 colorScheme="teal"
                                 width="full"
+                                onClick={handleSubmit}
                             >
                                 Login
                             </Button>
