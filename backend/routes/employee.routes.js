@@ -71,7 +71,7 @@ employeeRouter.delete('/employee/:id', auth, async (req, res) => {
     }
 })
 
-employeeRouter.put('/employee/:id', async (req, res) => {
+employeeRouter.put('/employee/:id',auth, async (req, res) => {
     const id = req.params.id;
     try {
         const { firstname, lastname, email, department, salary } = req.body;
@@ -85,4 +85,4 @@ employeeRouter.put('/employee/:id', async (req, res) => {
     }
 })
 
-module.exports = employeeRouter;
+module.exports = {employeeRouter};

@@ -9,7 +9,7 @@ const EmployeeSchema = mongoose.Schema({
     versionKey: false
 })
 
-const EmployeeModel = mongoose.model("User", EmployeeSchema);
+const EmployeeModel = mongoose.model("Employee", EmployeeSchema);
 
 module.exports = {
     EmployeeModel
