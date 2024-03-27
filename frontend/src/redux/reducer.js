@@ -1,10 +1,11 @@
-import { GET_EMPLOYEES_FAILURE, GET_EMPLOYEES_REQUEST, GET_EMPLOYEES_SUCCESS, LOGIN_FAILURE, LOGIN_REQUEST, LOGIN_SUCCESS } from "./action-types"
+import { GET_DEPARTMENTS_FAILURE, GET_DEPARTMENTS_REQUEST, GET_DEPARTMENTS_SUCCESS, GET_EMPLOYEES_FAILURE, GET_EMPLOYEES_REQUEST, GET_EMPLOYEES_SUCCESS, LOGIN_FAILURE, LOGIN_REQUEST, LOGIN_SUCCESS } from "./action-types"
 
 const initialState = {
     employees: [],
     isLoading: false,
     isError: false,
-    isLoggedin: false
+    isLoggedin: false,
+    departments: []
 }
 
 export const reducer = (state = initialState, action) => {
@@ -20,7 +21,13 @@ export const reducer = (state = initialState, action) => {
         case GET_EMPLOYEES_SUCCESS:
             return { ...state, isLoading: false, employees: action.payload };
         case GET_EMPLOYEES_FAILURE:
-            return { ...state, isLoading: false, employees: [] };
+            return { ...state, isLoading: false, employees: [], isError: true };
+        case GET_DEPARTMENTS_REQUEST:
+            return { ...state, isloading: true }
+        case GET_DEPARTMENTS_SUCCESS:
+            return { ...state, isloading: false, departments: action.payload };
+        case GET_DEPARTMENTS_FAILURE:
+            return { ...state, isError: true, isloading: false }
         default:
             return state
     }
